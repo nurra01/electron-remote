@@ -50,10 +50,10 @@ export async function rendererRequireDirect(modulePath, timeout=240*1000) {
       .mergeMap(([, , errMsg]) => Observable.throw(new Error(errMsg)))
     ).take(1).toPromise();
 
-  /* Uncomment for debugging!
-  bw.show();
-  bw.openDevTools();
-  */
+  if (process.env.ELECTRON_REMOTE_OPEN_DEV_TOOLS) {
+    bw.show();
+    bw.openDevTools();
+  }
 
   let preloadFile = path.join(__dirname, 'renderer-require-preload.html');
   bw.loadURL(`file:///${preloadFile}?module=${encodeURIComponent(fullPath)}`);
